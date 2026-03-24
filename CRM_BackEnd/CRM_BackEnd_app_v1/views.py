@@ -1,3 +1,101 @@
 from django.shortcuts import render
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from .serializers import UserSerializer, CustomerSerializer
+from .models import User, Customer
 
 # Create your views here.
+class RegisterUser(APIView):
+    def post(self, request):
+        try:
+            data = UserSerializer(data=request.data)
+            if data.is_valid():
+                validated_data = data.validated_data
+                user=User(fullName=validated_data["fullName"],
+                userid=validated_data["userid"],
+                email=validated_data["email"],
+                password=validated_data["password"],
+                role=validated_data["role"])
+                user.save()
+                return Response({"success":"user registered successfully"}, status=201)
+            else:
+                return Response({"error":"forbidden"}, status=403)
+        except Exception as e:
+            return Response({"error":str(e)},status=400)
+
+class LoginUser(APIView):
+    pass
+
+class RegisterCustomer(APIView):
+    def post(self, request):
+        try:
+            data = CustomerSerializer(data=request.data)
+            if data.is_valid():
+                validated_data = data.validated_data
+                customer=Customer(custid=validated_data["custid"],
+                fullName=validated_data["fullName"],
+                email=validated_data["email"],
+                mobile=validated_data["mobile"],
+                dob=validated_data["dob"],
+                occupation=validated_data["occupation"],
+                socialsURL=validated_data["socialsURL"],
+                role=validated_data["role"])
+                customer.save()
+                return Response({"success":"customer registered successfully"}, status=201)
+            else:
+                return Response({"error":"forbidden"}, status=403)
+        except Exception as e:
+            return Response({"error":str(e)},status=400)
+
+class UpdateCustomer(APIView):
+    def put(self, request, id):
+        try:
+            customer = Customer.objects.get(custid=id)
+            data = CustomerSerializer(data=request.data)
+            if data.is_valid():
+                validated_data = data.validated_data
+                customer["custid"] = validated_data["custid"]
+                customer["fullName"] = validated_data["fullName"]
+                customer["email"] = validated_data["email"]
+                customer["mobile"] = validated_data["mobile"]
+                customer["dob"] = validated_data["dob"]
+                customer["occupation"] = validated_data["occupation"]
+                customer["socialsURL"] = validated_data["socialsURL"]
+                customer["role"] = validated_data["role"]
+                customer.save()
+                serialized_customer = CustomerSerializer(customer)
+                return Response(serialized_customer.data,status=201)
+            else:
+                return Response({"error":"invaild input"}, status=403)
+        except Customer.DoesNotExist:
+            return Response({"error":"Customer not found"}, status=400)
+
+class DeleteCustomer(APIView):
+    def delete(self, request, id):
+        try:
+            customer = Customer.objects.get(custid=id)
+            customer.delete()
+            return Response({"success":"user deleted successfully"}, status=201)
+        except Customer.DoesNotExist:
+            return Response({"error":"Bad request"}, status=400)
+        
+class FindACustomer(APIView):
+    def get(self, request, id):
+        try:
+            customer = Customer.objects.get(custid=id)
+            serialized_customer = CustomerSerializer(customer)
+            return Response(serialized_customer.data, status=200)
+        except Customer.DoesNotExist:
+            return Response({"error":"Customer not found"},status)
+
+class FindALLCustomer(APIView):
+    def get(self, request,):
+        try:
+            customers = Customer.objects()
+            serialized_customer = CustomerSerializer(customers, many=True)
+            return Response(serialized_customer.data, status=200)
+        except Customer.DoesNotExist:
+            return Response({"error":"Customer not found"}, status=400)
+
+
+
