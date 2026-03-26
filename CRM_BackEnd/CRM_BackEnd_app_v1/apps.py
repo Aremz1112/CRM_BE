@@ -1,4 +1,5 @@
 from django.apps import AppConfig
+from mongoengine import connect
 
 
 class CrmBackendAppV1Config(AppConfig):
