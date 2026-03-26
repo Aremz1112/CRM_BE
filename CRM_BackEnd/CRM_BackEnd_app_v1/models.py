@@ -13,6 +13,7 @@ class User(Document):
 class Customer(Document):
     custid= StringField(max_length=200)
     fullName= StringField(max_length=200)
+    email = EmailField(max_length=200)
     mobile= StringField(max_length=20)
     dob= DateField()
     date_created = datetime.now()
