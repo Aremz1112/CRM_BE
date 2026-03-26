@@ -18,6 +18,7 @@ class Customer(Document):
     dob= DateField()
     date_created = datetime.now()
     occupation = StringField(max_length=20)
-    socials_Url = StringField ()
+    socialsUrl = StringField ()
+    role = ListField(StringField())
     
 
