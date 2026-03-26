@@ -1,6 +1,6 @@
-from django contrib import admin
+from .django contrib import admin
 from django.urls import path, include
-from.views import LoginUserAPIView, RegisterCustomerAPIView, UpdateCustomerAPIView, DeleteCustomer, FindACustomerAPIView, FindALLCustomerAPIView, RegisterUserAPIView
+from .views import LoginUserAPIView, RegisterCustomerAPIView, UpdateCustomerAPIView, DeleteCustomer, FindACustomerAPIView, FindALLCustomerAPIView, RegisterUserAPIView
 
 
 urlpatterns = [
