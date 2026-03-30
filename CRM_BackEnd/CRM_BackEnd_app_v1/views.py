@@ -11,11 +11,11 @@ class RegisterUser(APIView):
             data = UserSerializer(data=request.data)
             if data.is_valid():
                 validated_data = data.validated_data
-                user=User(fullName=validated_data["fullName"],
+                user = User(fullName=validated_data["fullName"],
                 userid=validated_data["userid"],
                 email=validated_data["email"],
-                password=validated_data["password"],
                 role=validated_data["role"])
+                user.set_password(validated_data["password"])
                 user.save()
                 return Response({"success":"user registered successfully"}, status=201)
             else:
