@@ -1,5 +1,4 @@
-from database import fields
-from .model import Customer, User, Customer
+from .models import Customer, User
 from rest_framework_mongoengine import serializers
 
 class UserSerializer(serializers.DocumentSerializer):

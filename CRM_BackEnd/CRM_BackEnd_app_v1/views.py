@@ -64,7 +64,7 @@ class UpdateCustomer(APIView):
                 customer["role"] = validated_data["role"]
                 customer.save()
                 serialized_customer = CustomerSerializer(customer)
-                return Response(serialized_customer.data,status=201)
+                return Response(serialized_customer.data,status=200)
             else:
                 return Response({"error":"invaild input"}, status=403)
         except Customer.DoesNotExist:
@@ -75,7 +75,7 @@ class DeleteCustomer(APIView):
         try:
             customer = Customer.objects.get(custid=id)
             customer.delete()
-            return Response({"success":"user deleted successfully"}, status=201)
+            return Response({"success":"user deleted successfully"}, status=200)
         except Customer.DoesNotExist:
             return Response({"error":"Bad request"}, status=400)
         
@@ -86,12 +86,12 @@ class FindACustomer(APIView):
             serialized_customer = CustomerSerializer(customer)
             return Response(serialized_customer.data, status=200)
         except Customer.DoesNotExist:
-            return Response({"error":"Customer not found"},status)
+            return Response({"error":"Customer not found"},status=400)
 
 class FindALLCustomer(APIView):
     def get(self, request,):
         try:
-            customers = Customer.objects()
+            customers = Customer.objects.all()
             serialized_customer = CustomerSerializer(customers, many=True)
             return Response(serialized_customer.data, status=200)
         except Customer.DoesNotExist:
