@@ -1,0 +1,2 @@
+class MongoJWTAuthentication():
+    pass
