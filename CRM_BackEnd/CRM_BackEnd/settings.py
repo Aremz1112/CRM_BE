@@ -137,7 +137,7 @@ SIMPLE_JWT = {
 
 
 
-REST_FRAMEWORK = {
+""" REST_FRAMEWORK = {
 "DEFAULT_AUTHENTICATION_CLASSES": (
 "CRM_BackEnd_app_v1.authentication.MongoJWTAuthentication",
 ),
@@ -145,3 +145,4 @@ REST_FRAMEWORK = {
 "rest_framework.permissions.IsAuthenticated",
 ),
 }
+ """
