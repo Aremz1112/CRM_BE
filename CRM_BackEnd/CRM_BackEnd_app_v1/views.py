@@ -1,3 +1,4 @@
+from rest_framework.permissions import AllowAny
 from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -6,6 +7,7 @@ from .models import User, Customer
 
 # Create your views here.
 class RegisterUser(APIView):
+    permission_classes = [AllowAny]
     def post(self, request):
         try:
             data = UserSerializer(data=request.data)
