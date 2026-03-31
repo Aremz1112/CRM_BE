@@ -9,7 +9,7 @@ class User(Document):
    fullName =StringField(max_length=200) 
    email = EmailField(max_length=200)
    password = StringField(max_length=200)
-   roles = ListField(StringField())
+   role = ListField(StringField())
 
    def set_password(self, password):
       self.password = make_password(pwd)
