@@ -12,7 +12,7 @@ class User(Document):
    role = ListField(StringField())
 
    def set_password(self, password):
-      self.password = make_password(pwd)
+      self.password = make_password(password)
 
    def check_password(self, password):
       return check_password(password, self.password)
