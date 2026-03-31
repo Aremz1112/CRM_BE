@@ -14,7 +14,6 @@ class RegisterUser(APIView):
             if data.is_valid():
                 validated_data = data.validated_data
                 user = User(fullName=validated_data["fullName"],
-                userid=validated_data["userid"],
                 email=validated_data["email"],
                 role=validated_data["role"])
                 user.set_password(validated_data["password"])
