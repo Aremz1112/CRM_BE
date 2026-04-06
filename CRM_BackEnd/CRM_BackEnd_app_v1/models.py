@@ -1,6 +1,7 @@
 from django.db import models
 from mongoengine import Document, ListField, StringField, EmailField, DateField
 from datetime import datetime
+from django.contrib.auth.hashers import check_password, make_password
 
 # Create your models here.
 
@@ -8,7 +9,17 @@ class User(Document):
    fullName =StringField(max_length=200) 
    email = EmailField(max_length=200)
    password = StringField(max_length=200)
-   roles = ListField(StringField())
+   role = ListField(StringField())
+
+   def set_password(self, password):
+      self.password = make_password(password)
+
+   def check_password(self, password):
+      return check_password(password, self.password)
+
+   @property
+   def is_authenticated(self):
+      return True
 
 class Customer(Document):
     custid= StringField(max_length=200)
