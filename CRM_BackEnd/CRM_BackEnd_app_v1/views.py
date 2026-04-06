@@ -46,6 +46,7 @@ class LoginUser(APIView):
                 {"detail": "Invalid password"},
                 status=status.HTTP_401_UNAUTHORIZED
             )
+        return Response({"success":"logged in successfully"}, status=200)
     
 
 class RegisterCustomer(APIView):
