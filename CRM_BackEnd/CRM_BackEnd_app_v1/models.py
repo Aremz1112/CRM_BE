@@ -6,7 +6,7 @@ from django.contrib.auth.hashers import check_password, make_password
 # Create your models here.
 
 class User(Document):
-   userid = StringField
+   userid = StringField()
    fullName =StringField(max_length=200) 
    email = EmailField(max_length=200)
    password = StringField(max_length=200)
