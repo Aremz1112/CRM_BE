@@ -4,6 +4,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from .serializers import UserSerializer, CustomerSerializer
 from .models import User, Customer
+from uuid import uuid4
 
 # Create your views here.
 class RegisterUser(APIView):
@@ -13,7 +14,8 @@ class RegisterUser(APIView):
             data = UserSerializer(data=request.data)
             if data.is_valid():
                 validated_data = data.validated_data
-                user = User(fullName=validated_data["fullName"],
+                user = User(userid=str(uuid4()),
+                fullName=validated_data["fullName"],
                 email=validated_data["email"],
                 role=validated_data["role"])
                 user.set_password(validated_data["password"])
@@ -25,7 +27,26 @@ class RegisterUser(APIView):
             return Response({"error":str(e)},status=400)
 
 class LoginUser(APIView):
-    pass
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        email = request.data.get("email")
+        password = request.data.get("password")
+
+        try:
+            user = User.objects.get(email=email)
+        except DoesNotExist:
+            return Response(
+                {"detail": "Invalid credentials"},
+                status=status.HTTP_401_UNAUTHORIZED
+            )
+
+        if not user.check_password(password):
+            return Response(
+                {"detail": "Invalid password"},
+                status=status.HTTP_401_UNAUTHORIZED
+            )
+    
 
 class RegisterCustomer(APIView):
     def post(self, request):
