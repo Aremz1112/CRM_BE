@@ -6,6 +6,7 @@ from .serializers import UserSerializer, CustomerSerializer
 from .models import User, Customer
 from uuid import uuid4
 from rest_framework import status
+from rest_framework_simplejwt.tokens import AccessToken
 
 # Create your views here.
 class RegisterUser(APIView):
@@ -47,7 +48,29 @@ class LoginUser(APIView):
                 {"detail": "Invalid password"},
                 status=status.HTTP_401_UNAUTHORIZED
             )
-        return Response({"success":"logged in successfully"}, status=200)
+        token = AccessToken()
+        token["userid"] = str(user.userid)
+        token["email"] = user.email
+        token["role"] = user.role
+
+        response = Response(
+            {
+                "message": "Login successful",
+                "access": str(token)
+            },
+            status=status.HTTP_200_OK
+        )
+
+        response.set_cookie(
+            key="access_token",
+            value=str(token),
+            httponly=False,   # True in production
+            secure=False,     # True in production (HTTPS)
+            samesite="Lax",
+            max_age=420
+        )
+
+        return response
     
 
 class RegisterCustomer(APIView):
