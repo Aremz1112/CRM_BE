@@ -8,7 +8,7 @@ from django.contrib.auth.hashers import check_password, make_password
 class User(Document):
    userid = StringField()
    fullName =StringField(max_length=200) 
-   email = EmailField(max_length=200)
+   email = EmailField(max_length=200, unique= True)
    password = StringField(max_length=200)
    role = ListField(StringField())
 
