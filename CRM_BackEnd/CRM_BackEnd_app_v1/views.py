@@ -34,8 +34,8 @@ class LoginUser(APIView):
         password = request.data.get("password")
 
         try:
-            user = User.objects.get(email=email)
-        except DoesNotExist:
+            user = User.objects.filter(email=email)
+        except User.DoesNotExist:
             return Response(
                 {"detail": "Invalid credentials"},
                 status=status.HTTP_401_UNAUTHORIZED
