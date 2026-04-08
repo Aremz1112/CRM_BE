@@ -5,6 +5,7 @@ from rest_framework.response import Response
 from .serializers import UserSerializer, CustomerSerializer
 from .models import User, Customer
 from uuid import uuid4
+from rest_framework import status
 
 # Create your views here.
 class RegisterUser(APIView):
