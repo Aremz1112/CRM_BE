@@ -34,7 +34,7 @@ class LoginUser(APIView):
         password = request.data.get("password")
 
         try:
-            user = User.objects.filter(email=email)
+            user = User.objects.get(email=email)
         except User.DoesNotExist:
             return Response(
                 {"detail": "Invalid credentials"},
