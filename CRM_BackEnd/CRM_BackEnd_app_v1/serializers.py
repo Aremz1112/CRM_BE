@@ -12,3 +12,10 @@ class CustomerSerializer(serializers.DocumentSerializer):
     class Meta:
         model=Customer
         fields='__all__'
+
+
+from rest_framework import serializers
+
+class LoginSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+    password = serializers.CharField()
