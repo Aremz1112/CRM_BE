@@ -36,9 +36,9 @@ class UpdateUser(APIView):
             data = UserSerializer(data=request.data)
             if data.is_valid():
                 validated_data = data.validated_data
-                user["userid"] = validated_data["userid"]
                 user["fullName"] = validated_data["fullName"]
                 user["email"] = validated_data["email"]
+                user["password"] = validated_data["password"]
                 user["role"] = validated_data["role"]
                 user.save()
                 serialized_user = UserSerializer(user)
