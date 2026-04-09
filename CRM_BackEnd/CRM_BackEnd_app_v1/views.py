@@ -38,8 +38,8 @@ class UpdateUser(APIView):
                 validated_data = data.validated_data
                 user["fullName"] = validated_data["fullName"]
                 user["email"] = validated_data["email"]
-                user["password"] = validated_data["password"]
                 user["role"] = validated_data["role"]
+                user.set_password(validated_data["password"])
                 user.save()
                 serialized_user = UserSerializer(user)
                 return Response(serialized_User.data,status=200)
