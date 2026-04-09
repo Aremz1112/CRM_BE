@@ -32,7 +32,7 @@ class UpdateUser(APIView):
     permission_classes = [AllowAny]
     def put(self, request, id):
         try:
-            user = User.objects.get(userid=id)
+            user = User.objects.get(email=email)
             data = UserSerializer(data=request.data)
             if data.is_valid():
                 validated_data = data.validated_data
