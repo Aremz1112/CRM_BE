@@ -11,7 +11,7 @@ urlpatterns = [
     path('FindALLCustomer/<str:id>', FindALLCustomer.as_view(), name="this api is used to find all customer") ,
     path('RegisterUser', RegisterUser.as_view(), name="this api is used to register a user") ,
     path('login', LoginUser.as_view(), name="this api is used to login a user") ,
-    path('UpdateUser',UpdateUser.as_view(), name="this api is used to Update a user") ,
+    path('UpdateUser/<str:email>',UpdateUser.as_view(), name="this api is used to Update a user") ,
     
     
 
