@@ -30,7 +30,7 @@ class RegisterUser(APIView):
 
 class UpdateUser(APIView):
     permission_classes = [AllowAny]
-    def put(self, request, id):
+    def put(self, request, email):
         try:
             user = User.objects.get(email=email)
             data = UserSerializer(data=request.data)
