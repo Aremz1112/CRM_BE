@@ -28,6 +28,27 @@ class RegisterUser(APIView):
         except Exception as e:
             return Response({"error":str(e)},status=400)
 
+class UpdateUser(APIView):
+    permission_classes = [AllowAny]
+    def put(self, request, id):
+        try:
+            user = User.objects.get(userid=id)
+            data = UserSerializer(data=request.data)
+            if data.is_valid():
+                validated_data = data.validated_data
+                user["fullName"] = validated_data["fullName"]
+                user["email"] = validated_data["email"]
+                user["password"] = validated_data["password"]
+                user["role"] = validated_data["role"]
+                user.save()
+                serialized_user = UserSerializer(user)
+                return Response(serialized_User.data,status=200)
+            else:
+                return Response({"error":"invaild input"}, status=403)
+        except Customer.DoesNotExist:
+            return Response({"error":"User not found"}, status=400)
+
+
 class LoginUser(APIView):
     permission_classes = [AllowAny]
 
