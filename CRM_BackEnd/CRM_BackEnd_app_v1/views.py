@@ -16,7 +16,7 @@ class RegisterUser(APIView):
             data = UserSerializer(data=request.data)
             if data.is_valid():
                 validated_data = data.validated_data
-                user = User(userid=str(uuid4()),
+                user = User(
                 fullName=validated_data["fullName"],
                 email=validated_data["email"],
                 role=validated_data["role"])
@@ -38,10 +38,14 @@ class UpdateUser(APIView):
 
             if serializer.is_valid():
                 validated_data = serializer.validated_data
-
-                user.fullName = validated_data.get("fullName", user.fullName)
-                user.role = validated_data.get("role", user.role)
-                user.set_password(validated_data["password"])
+                if "fullName" in validated_data:
+                    user.fullName = validated_data.get("fullName", user.fullName)
+                if "role" in validated_data:
+                    user.role = validated_data.get("role", user.role)
+                if "email" in validated_data:
+                    user.email = validated_data.get("email", user.email)
+                if "password" in validated_data:
+                    user.set_password(validated_data["password"])
 
                 user.save()
 
@@ -103,14 +107,13 @@ class RegisterCustomer(APIView):
             data = CustomerSerializer(data=request.data)
             if data.is_valid():
                 validated_data = data.validated_data
-                customer=Customer(custid=validated_data["custid"],
+                customer=Customer(
                 fullName=validated_data["fullName"],
                 email=validated_data["email"],
                 mobile=validated_data["mobile"],
                 dob=validated_data["dob"],
                 occupation=validated_data["occupation"],
-                socialsURL=validated_data["socialsURL"],
-                role=validated_data["role"])
+                socialsURL=validated_data["socialsURL"])
                 customer.save()
                 return Response({"success":"customer registered successfully"}, status=201)
             else:
@@ -118,7 +121,7 @@ class RegisterCustomer(APIView):
         except Exception as e:
             return Response({"error":str(e)},status=400)
 
- class UpdateCustomer(APIView):
+class UpdateCustomer(APIView):
     def put(self, request, id):
         try:
             customer = Customer.objects.get(custid=id)
@@ -130,6 +133,18 @@ class RegisterCustomer(APIView):
             )
 
             if serializer.is_valid():
+                if "fullName" in validated_data:
+                    user.fullName = validated_data.get("fullName", user.fullName)
+                if "email" in validated_data:
+                    user.email = validated_data.get("email", user.email)
+                if "mobile" in validated_data:
+                    user.mobile = validated_data.get("mobile", user.mobile)
+                if "occupation" in validated_data:
+                    user.occupation = validated_data.get("occupation", user.occupation) 
+                if "dob" in validated_data:
+                    user.dob = validated_data.get("dob", user.dob)
+                if "socialsURL" in validated_data:
+                    user.socialsURL = validated_data.get("socialsURL", user.socialsURL)
                 serializer.save()
                 return Response(serializer.data, status=200)
 
