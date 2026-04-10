@@ -5,9 +5,9 @@ from rest_framework.response import Response
 from .serializers import UserSerializer, CustomerSerializer
 from .models import User, Customer
 from uuid import uuid4
-from datetime import datetime
 from rest_framework import status
 from rest_framework_simplejwt.tokens import AccessToken
+from .authentication import MongoJWTAuthentication
 
 # Create your views here.
 class RegisterUser(APIView):
@@ -17,12 +17,8 @@ class RegisterUser(APIView):
             data = UserSerializer(data=request.data)
             if data.is_valid():
                 validated_data = data.validated_data
-<<<<<<< HEAD
-                user = User(fullName=validated_data["fullName"],
-=======
                 user = User(userid=str(uuid4()),
                 fullName=validated_data["fullName"],
->>>>>>> Dani
                 email=validated_data["email"],
                 role=validated_data["role"])
                 user.set_password(validated_data["password"])
@@ -34,7 +30,8 @@ class RegisterUser(APIView):
             return Response({"error":str(e)},status=400)
 
 class UpdateUser(APIView):
-    permission_classes = [AllowAny]
+    authentication_classes = [MongoJWTAuthentication]
+    #permission_classes = [AllowAny]
     def put(self, request, email):
         try:
             user = User.objects.get(email=email)
@@ -107,6 +104,7 @@ class LoginUser(APIView):
     
 
 class RegisterCustomer(APIView):
+    authentication_classes = [MongoJWTAuthentication]
     def post(self, request):
         try:
             data = CustomerSerializer(data=request.data)
@@ -128,6 +126,7 @@ class RegisterCustomer(APIView):
             return Response({"error":str(e)},status=400)
 
 class UpdateCustomer(APIView):
+    authentication_classes = [MongoJWTAuthentication]
     def put(self, request, id):
         try:
             customer = Customer.objects.get(custid=id)
@@ -139,21 +138,20 @@ class UpdateCustomer(APIView):
             )
 
             if serializer.is_valid():
-                validated_data = serializer.validated_data
                 if "fullName" in validated_data:
-                    customer.fullName = validated_data.get("fullName", customer.fullName)
+                    user.fullName = validated_data.get("fullName", user.fullName)
                 if "email" in validated_data:
-                    customer.email = validated_data.get("email", customer.email)
+                    user.email = validated_data.get("email", user.email)
                 if "mobile" in validated_data:
-                    customer.mobile = validated_data.get("mobile", customer.mobile)
+                    user.mobile = validated_data.get("mobile", user.mobile)
                 if "occupation" in validated_data:
-                    customer.occupation = validated_data.get("occupation", customer.occupation) 
+                    user.occupation = validated_data.get("occupation", user.occupation) 
                 if "dob" in validated_data:
-                    customer.dob = validated_data.get("dob", customer.dob)
+                    user.dob = validated_data.get("dob", user.dob)
                 if "socialsURL" in validated_data:
-                    customer.socialsURL = validated_data.get("socialsURL", customer.socialsURL)
-                customer.save()
-                return Response(CustomerSerializer(customer).data, status=200)
+                    user.socialsURL = validated_data.get("socialsURL", user.socialsURL)
+                serializer.save()
+                return Response(serializer.data, status=200)
 
             return Response(serializer.errors, status=400)
 
@@ -161,15 +159,18 @@ class UpdateCustomer(APIView):
             return Response({"error": "Customer not found"}, status=404)
 
 class DeleteCustomer(APIView):
+    authentication_classes = [MongoJWTAuthentication]
     def delete(self, request, id):
         try:
             customer = Customer.objects.get(custid=id)
             customer.delete()
-            return Response({"success":" customer deleted successfully"}, status=200)
+            return Response({"success":"user deleted successfully"}, status=200)
         except Customer.DoesNotExist:
             return Response({"error":"Bad request"}, status=400)
         
 class FindACustomer(APIView):
+    authentication_classes = [MongoJWTAuthentication]
+    #permission_classes = [AllowAny]
     def get(self, request, id):
         try:
             customer = Customer.objects.get(custid=id)
@@ -179,6 +180,7 @@ class FindACustomer(APIView):
             return Response({"error":"Customer not found"},status=400)
 
 class FindALLCustomer(APIView):
+    authentication_classes = [MongoJWTAuthentication]
     def get(self, request,):
         try:
             customers = Customer.objects.all()
@@ -186,6 +188,3 @@ class FindALLCustomer(APIView):
             return Response(serialized_customer.data, status=200)
         except Customer.DoesNotExist:
             return Response({"error":"Customer not found"}, status=400)
-
-
-

@@ -2,10 +2,7 @@ from django.db import models
 from mongoengine import Document, ListField, StringField, EmailField, DateField
 from datetime import datetime
 from django.contrib.auth.hashers import check_password, make_password
-<<<<<<< HEAD
-=======
 from uuid import uuid4
->>>>>>> Dani
 
 # Create your models here.
 

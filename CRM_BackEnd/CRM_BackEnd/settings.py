@@ -134,15 +134,12 @@ SIMPLE_JWT = {
 'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
 }
 
-
-
-
-""" REST_FRAMEWORK = {
-"DEFAULT_AUTHENTICATION_CLASSES": (
-"CRM_BackEnd_app_v1.authentication.MongoJWTAuthentication",
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+    "CRM_BackEnd_app_v1.authentication.MongoJWTAuthentication",
 ),
-"DEFAULT_PERMISSION_CLASSES": (
-"rest_framework.permissions.IsAuthenticated",
+    "DEFAULT_PERMISSION_CLASSES": (
+    "rest_framework.permissions.IsAuthenticated",
 ),
 }
- """
+ 
