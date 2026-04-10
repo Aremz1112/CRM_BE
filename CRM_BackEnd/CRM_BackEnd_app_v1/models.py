@@ -7,7 +7,7 @@ from uuid import uuid4
 # Create your models here.
 
 class User(Document):
-   userid = str(uuid4())
+   userid = StringField()
    fullName =StringField(max_length=200) 
    email = EmailField(max_length=200, unique= True)
    password = StringField(max_length=200)
@@ -24,12 +24,12 @@ class User(Document):
       return True
 
 class Customer(Document):
-    custid= str(uuid4())
+    custid= StringField()
     fullName= StringField(max_length=200)
     email = EmailField(max_length=200)
     mobile= StringField(max_length=20)
     dob= DateField()
-    date_created = datetime.now()
+    date_created = DateField()
     occupation = StringField(max_length=20)
     socialsURL = StringField ()
    
