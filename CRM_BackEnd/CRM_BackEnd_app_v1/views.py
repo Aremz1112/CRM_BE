@@ -16,7 +16,7 @@ class RegisterUser(APIView):
             data = UserSerializer(data=request.data)
             if data.is_valid():
                 validated_data = data.validated_data
-                user = User(
+                user = User(userid=str(uuid4()),
                 fullName=validated_data["fullName"],
                 email=validated_data["email"],
                 role=validated_data["role"])
@@ -107,11 +107,12 @@ class RegisterCustomer(APIView):
             data = CustomerSerializer(data=request.data)
             if data.is_valid():
                 validated_data = data.validated_data
-                customer=Customer(
+                customer=Customer(custid=str(uuid4()),
                 fullName=validated_data["fullName"],
                 email=validated_data["email"],
                 mobile=validated_data["mobile"],
                 dob=validated_data["dob"],
+                date_created=datetime.now(),
                 occupation=validated_data["occupation"],
                 socialsURL=validated_data["socialsURL"])
                 customer.save()
