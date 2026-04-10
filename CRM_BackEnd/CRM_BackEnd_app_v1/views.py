@@ -135,20 +135,21 @@ class UpdateCustomer(APIView):
             )
 
             if serializer.is_valid():
+                validated_data = serializer.validated_data
                 if "fullName" in validated_data:
-                    user.fullName = validated_data.get("fullName", user.fullName)
+                    customer.fullName = validated_data.get("fullName", customer.fullName)
                 if "email" in validated_data:
-                    user.email = validated_data.get("email", user.email)
+                    customer.email = validated_data.get("email", customer.email)
                 if "mobile" in validated_data:
-                    user.mobile = validated_data.get("mobile", user.mobile)
+                    customer.mobile = validated_data.get("mobile", customer.mobile)
                 if "occupation" in validated_data:
-                    user.occupation = validated_data.get("occupation", user.occupation) 
+                    customer.occupation = validated_data.get("occupation", customer.occupation) 
                 if "dob" in validated_data:
-                    user.dob = validated_data.get("dob", user.dob)
+                    customer.dob = validated_data.get("dob", customer.dob)
                 if "socialsURL" in validated_data:
-                    user.socialsURL = validated_data.get("socialsURL", user.socialsURL)
-                serializer.save()
-                return Response(serializer.data, status=200)
+                    customer.socialsURL = validated_data.get("socialsURL", customer.socialsURL)
+                customer.save()
+                return Response(CustomerSerializer(customer).data, status=200)
 
             return Response(serializer.errors, status=400)
 
@@ -160,7 +161,7 @@ class DeleteCustomer(APIView):
         try:
             customer = Customer.objects.get(custid=id)
             customer.delete()
-            return Response({"success":"user deleted successfully"}, status=200)
+            return Response({"success":" customer deleted successfully"}, status=200)
         except Customer.DoesNotExist:
             return Response({"error":"Bad request"}, status=400)
         
