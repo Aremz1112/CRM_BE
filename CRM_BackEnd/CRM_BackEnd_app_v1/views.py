@@ -33,21 +33,24 @@ class UpdateUser(APIView):
     def put(self, request, email):
         try:
             user = User.objects.get(email=email)
-            data = UserSerializer(data=request.data)
-            if data.is_valid():
-                validated_data = data.validated_data
-                user["fullName"] = validated_data["fullName"]
-                user["email"] = validated_data["email"]
-                user["role"] = validated_data["role"]
-                user.set_password(validated_data["password"])
-                user.save()
-                serialized_user = UserSerializer(user)
-                return Response(serialized_User.data,status=200)
-            else:
-                return Response({"error":"invaild input"}, status=403)
-        except Customer.DoesNotExist:
-            return Response({"error":"User not found"}, status=400)
 
+            serializer = UserSerializer(user, data=request.data, partial=True)
+
+            if serializer.is_valid():
+                validated_data = serializer.validated_data
+
+                user.fullName = validated_data.get("fullName", user.fullName)
+                user.role = validated_data.get("role", user.role)
+                user.set_password(validated_data["password"])
+
+                user.save()
+
+                return Response(UserSerializer(user).data, status=200)
+
+            return Response(serializer.errors, status=400)
+
+        except User.DoesNotExist:
+            return Response({"error": "User not found"}, status=404)
 
 class LoginUser(APIView):
     permission_classes = [AllowAny]
@@ -115,28 +118,25 @@ class RegisterCustomer(APIView):
         except Exception as e:
             return Response({"error":str(e)},status=400)
 
-class UpdateCustomer(APIView):
+ class UpdateCustomer(APIView):
     def put(self, request, id):
         try:
             customer = Customer.objects.get(custid=id)
-            data = CustomerSerializer(data=request.data)
-            if data.is_valid():
-                validated_data = data.validated_data
-                customer["custid"] = validated_data["custid"]
-                customer["fullName"] = validated_data["fullName"]
-                customer["email"] = validated_data["email"]
-                customer["mobile"] = validated_data["mobile"]
-                customer["dob"] = validated_data["dob"]
-                customer["occupation"] = validated_data["occupation"]
-                customer["socialsURL"] = validated_data["socialsURL"]
-                customer["role"] = validated_data["role"]
-                customer.save()
-                serialized_customer = CustomerSerializer(customer)
-                return Response(serialized_customer.data,status=200)
-            else:
-                return Response({"error":"invaild input"}, status=403)
+
+            serializer = CustomerSerializer(
+                customer, 
+                data=request.data, 
+                partial=True
+            )
+
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=200)
+
+            return Response(serializer.errors, status=400)
+
         except Customer.DoesNotExist:
-            return Response({"error":"Customer not found"}, status=400)
+            return Response({"error": "Customer not found"}, status=404)
 
 class DeleteCustomer(APIView):
     def delete(self, request, id):
