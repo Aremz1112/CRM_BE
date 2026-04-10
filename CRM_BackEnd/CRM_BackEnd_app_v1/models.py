@@ -2,12 +2,17 @@ from django.db import models
 from mongoengine import Document, ListField, StringField, EmailField, DateField
 from datetime import datetime
 from django.contrib.auth.hashers import check_password, make_password
+<<<<<<< HEAD
+=======
+from uuid import uuid4
+>>>>>>> Dani
 
 # Create your models here.
 
 class User(Document):
+   userid = StringField()
    fullName =StringField(max_length=200) 
-   email = EmailField(max_length=200)
+   email = EmailField(max_length=200, unique= True)
    password = StringField(max_length=200)
    role = ListField(StringField())
 
@@ -22,13 +27,13 @@ class User(Document):
       return True
 
 class Customer(Document):
-    custid= StringField(max_length=200)
+    custid= StringField()
     fullName= StringField(max_length=200)
     email = EmailField(max_length=200)
     mobile= StringField(max_length=20)
     dob= DateField()
-    date_created = datetime.now()
+    date_created = DateField()
     occupation = StringField(max_length=20)
     socialsURL = StringField ()
-    role = ListField(StringField())
+   
     
